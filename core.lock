@@ -1,0 +1,7 @@
+# Reviewed source lock. Update only after explicit review.
+CORE_REPOSITORY=https://github.com/human-centered-computing/nextopensource.git
+CORE_REVISION=857048365d9a5265f43c10c0f1611409c00233ee
+CORE_PATH=Core/NextID-Core/source
+CORE_TREE=6f439a9bda71c39bf725150cea5d50f149e423f6
+KEYCLOAK_VERSION=26.8.2
+KEYCLOAK_UPSTREAM_COMMIT=e514445f9dcdabc5bdcf67cab56c1e49655de067

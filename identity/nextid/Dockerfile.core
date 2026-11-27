@@ -1,0 +1,17 @@
+FROM maven:3.9-eclipse-temurin-21 AS source-build
+ARG KEYCLOAK_VERSION=26.8.2
+RUN apt-get update && apt-get install -y --no-install-recommends libicu-dev && rm -rf /var/lib/apt/lists/*
+WORKDIR /build
+COPY . .
+RUN ./mvnw -B -pl quarkus/deployment,quarkus/dist -am -DskipTests clean install && \
+    mkdir -p /distribution && \
+    tar -xzf "quarkus/dist/target/keycloak-${KEYCLOAK_VERSION}.tar.gz" -C /distribution --strip-components=1
+
+FROM eclipse-temurin:21-jre
+ENV KC_RUN_IN_CONTAINER=true
+WORKDIR /opt/keycloak
+COPY --from=source-build --chown=1000:0 /distribution/ /opt/keycloak/
+RUN mkdir -p /opt/keycloak/data/import && chown -R 1000:0 /opt/keycloak && chmod -R g+rwX /opt/keycloak
+USER 1000
+EXPOSE 8080 8443 9000
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]

@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+.nextid-core/
+.nextid-core.tmp.*
+*.jar
+**/target/
+*.log

@@ -1,0 +1,93 @@
+name: Build and Publish NextID
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout product
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch and verify locked Core
+        run: bash scripts/fetch-core.sh
+      - name: Build Core and product images
+        run: bash scripts/build-local.sh
+      - name: Verify product distribution
+        run: |
+          source core.lock
+          docker run --rm "nextid:$KEYCLOAK_VERSION-local" --version
+          docker run --rm --entrypoint /bin/sh "nextid:$KEYCLOAK_VERSION-local" -ec 'test -f /opt/keycloak/themes/nextid/login/theme.properties && test -f /opt/keycloak/themes/nextid/account/theme.properties && test -f /opt/keycloak/themes/nextid/admin/theme.properties'
+      - name: Smoke-test PostgreSQL and synthetic realm
+        shell: bash
+        run: |
+          set -euo pipefail
+          source core.lock
+          export NEXTID_IMAGE=nextid
+          export NEXTID_CORE_IMAGE_TAG="$KEYCLOAK_VERSION-local"
+          export NEXTID_DB_PASSWORD="$(openssl rand -hex 24)"
+          export NEXTID_BOOTSTRAP_ADMIN_PASSWORD="$(openssl rand -hex 24)"
+          trap 'docker compose down -v' EXIT
+          docker compose up -d
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --max-time 5 http://localhost:8080/realms/nextid-pilot/.well-known/openid-configuration > /tmp/nextid-discovery.json; then
+              python -c 'import json; doc=json.load(open("/tmp/nextid-discovery.json")); assert doc["issuer"].endswith("/realms/nextid-pilot")'
+              exit 0
+            fi
+            sleep 5
+          done
+          docker compose logs --tail=100
+          exit 1
+      - name: Save tested image for main publication
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          source core.lock
+          docker save "nextid:$KEYCLOAK_VERSION-local" | gzip -1 > nextid-image.tar.gz
+      - name: Transfer tested image
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextid-tested-image
+          path: nextid-image.tar.gz
+          retention-days: 1
+          if-no-files-found: error
+
+  publish:
+    needs: build-and-test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: nextid-tested-image
+      - name: Publish verified image
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          source core.lock
+          gunzip -c nextid-image.tar.gz | docker load
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          image=ghcr.io/human-centered-computing/nextid
+          docker tag "nextid:$KEYCLOAK_VERSION-local" "$image:$KEYCLOAK_VERSION"
+          docker tag "nextid:$KEYCLOAK_VERSION-local" "$image:latest"
+          docker push "$image:$KEYCLOAK_VERSION"
+          docker push "$image:latest"
+          docker logout ghcr.io
