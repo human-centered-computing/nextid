@@ -28,7 +28,7 @@ The isolated pilot is available at http://localhost:8080. The example realm has 
 
 ## Institutional configuration
 
-All Harran-specific NextID configuration is maintained under [harran.edu.tr](harran.edu.tr/README.md). NextRole defines roles and groups; NextID applies the approved mappings in the corresponding realm.
+Institution-specific settings are managed in the independent private [NextConfig](https://github.com/human-centered-computing/nextconfig) repository under institution and module directories. NextRole defines roles and groups; NextID applies the approved mappings in the corresponding realm. No institution-specific configuration is included in this public product repository.
 
 ## Build and distribution
 

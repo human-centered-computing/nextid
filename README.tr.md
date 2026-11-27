@@ -28,7 +28,7 @@ docker compose up -d
 
 ## Kurum yapılandırmaları
 
-Harran'a özel tüm NextID yapılandırmaları doğrudan [harran.edu.tr](harran.edu.tr/README.tr.md) klasöründe tutulur. NextRole rol ve grupları tanımlar, NextID onaylı eşlemeleri ilgili realm'de uygular.
+Kuruma özgü ayarlar bağımsız gizli [NextConfig](https://github.com/human-centered-computing/nextconfig) deposunda kurum ve modül klasörleri altında yönetilir. NextRole rol ve grupları tanımlar, NextID onaylı eşlemeleri ilgili realm'de uygular. Bu açık ürün deposu kurum yapılandırmalarını içermez.
 
 ## Derleme ve dağıtım
 
