@@ -1,6 +1,6 @@
 # NextID
 
-[English](README.md) · [Türkçe](README.tr.md)
+[English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [العربية](README.ar.md)
 
 NextID, NextLife'ın merkezi kimlik ve erişim yönetimi ürünüdür. İnsanlar ve yetkilendirilmiş yazılım bileşenleri için ortak kimlik temeli sağlar. Böylece kullanıcılar her uygulama için ayrı bir hesap oluşturmak zorunda kalmadan NextLife uygulamalarında güvenli biçimde kimlik doğrulayabilir.
 
