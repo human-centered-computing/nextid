@@ -15,5 +15,6 @@
   "adminTheme": "nextid",
   "sslRequired": "external",
   "clients": [],
-  "users": []
+  "users": [],
+  "emailTheme": "nextid"
 }
