@@ -1,0 +1,19 @@
+{
+  "realm": "nextid-pilot",
+  "displayName": "NextID Pilot",
+  "enabled": true,
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "en",
+    "tr"
+  ],
+  "defaultLocale": "en",
+  "loginTheme": "nextid",
+  "accountTheme": "nextid",
+  "adminTheme": "nextid",
+  "sslRequired": "external",
+  "clients": [],
+  "users": []
+}

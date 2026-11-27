@@ -1,0 +1,39 @@
+services:
+  nextid-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${NEXTID_DB_NAME:-nextid}
+      POSTGRES_USER: ${NEXTID_DB_USER:-nextid}
+      POSTGRES_PASSWORD: ${NEXTID_DB_PASSWORD:?Set NEXTID_DB_PASSWORD in your local .env}
+    volumes:
+      - nextid_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  nextid-core:
+    image: ${NEXTID_IMAGE:-ghcr.io/human-centered-computing/nextid}:${NEXTID_CORE_IMAGE_TAG:-latest}
+    depends_on:
+      nextid-db:
+        condition: service_healthy
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://nextid-db:5432/${NEXTID_DB_NAME:-nextid}
+      KC_DB_USERNAME: ${NEXTID_DB_USER:-nextid}
+      KC_DB_PASSWORD: ${NEXTID_DB_PASSWORD:?Set NEXTID_DB_PASSWORD in your local .env}
+      KC_HOSTNAME: http://localhost:${NEXTID_HTTP_PORT:-8080}
+      KC_HTTP_ENABLED: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${NEXTID_BOOTSTRAP_ADMIN_USERNAME:-nextid-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${NEXTID_BOOTSTRAP_ADMIN_PASSWORD:?Set NEXTID_BOOTSTRAP_ADMIN_PASSWORD in your local .env}
+    ports:
+      - "127.0.0.1:${NEXTID_HTTP_PORT:-8080}:8080"
+    volumes:
+      - ./realm-config/nextid-pilot-realm.json:/opt/keycloak/data/import/nextid-pilot-realm.json:ro
+    command: ["start", "--optimized", "--import-realm"]
+    restart: unless-stopped
+
+volumes:
+  nextid_db_data:

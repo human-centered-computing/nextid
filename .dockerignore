@@ -1,0 +1,7 @@
+.git
+.env
+.env.*
+.nextid-core
+.nextid-core.tmp.*
+**/target
+*.log

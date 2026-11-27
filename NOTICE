@@ -1,0 +1,3 @@
+NextID is a customized distribution planned on top of Keycloak, an open-source identity and access management project licensed under Apache-2.0. The original source is maintained in NextOpenSource/Core/NextID-Core. NextID does not claim ownership of Keycloak or its trademarks.
+
+NextID theme assets and structure were reused with the user's authorization from muratdelen/NextID revision 139d243758251bff290502ec183afd45a8df4552. Public source visibility alone does not grant new licensing rights; review original product material and dependencies before redistribution.
