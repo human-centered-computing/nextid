@@ -1,6 +1,6 @@
 # NextID
 
-[English](README.md) · [Türkçe](README.tr.md)
+[English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [العربية](README.ar.md)
 
 NextID is NextLife's central identity and access management product. It provides a shared identity foundation for people and authorized workloads, so users can securely authenticate across NextLife applications without creating a separate account in every application.
 
