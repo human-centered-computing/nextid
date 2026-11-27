@@ -1,5 +1,7 @@
 # NextID
 
+> Übersetzungsstatus: KI-unterstützter Entwurf, menschliche Sprachprüfung ausstehend.
+
 [English](README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [العربية](README.ar.md)
 
 NextID ist das zentrale Identitäts- und Zugriffsmanagement von NextLife. Menschen und autorisierte Softwarekomponenten erhalten eine gemeinsame Identitätsgrundlage für sichere Anmeldung bei integrierten Anwendungen, ohne separate Konten.
