@@ -26,6 +26,10 @@ docker compose up -d
 
 The isolated pilot is available at http://localhost:8080. The example realm has no real users, clients or institutional secrets.
 
+## Institutional configuration
+
+All Harran-specific NextID configuration is maintained under [harran.edu.tr](harran.edu.tr/README.md). NextRole defines roles and groups; NextID applies the approved mappings in the corresponding realm.
+
 ## Build and distribution
 
 `core.lock` pins the reviewed source in NextOpenSource. To build from source rather than pull a released image:

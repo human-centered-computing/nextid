@@ -26,6 +26,10 @@ docker compose up -d
 
 İzole pilot http://localhost:8080 adresinde çalışır. Örnek realm gerçek kullanıcı, istemci veya kurumsal gizli bilgi içermez.
 
+## Kurum yapılandırmaları
+
+Harran'a özel tüm NextID yapılandırmaları doğrudan [harran.edu.tr](harran.edu.tr/README.tr.md) klasöründe tutulur. NextRole rol ve grupları tanımlar, NextID onaylı eşlemeleri ilgili realm'de uygular.
+
 ## Derleme ve dağıtım
 
 `core.lock`, NextOpenSource içindeki onaylı kaynak sürümünü sabitler. Yayınlanmış imaj yerine kaynaktan derlemek için:
